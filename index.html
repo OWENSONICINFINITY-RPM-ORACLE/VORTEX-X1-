@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vortex X1 Iris Throttle Body — LS6 Engine | Kickstarter Pre-Launch</title>
+    <meta name="description" content="Vortex X1 Iris Throttle Body — 12-blade camera-aperture mechanism for LS1-LS6 engines. Zero shaft obstruction. Full WOT vapor flow. Created by Douglas Owens Jr., Cleveland OH.">
+    <meta name="author" content="Douglas Owens Jr. — OwenSonicInfinity">
+    <meta name="robots" content="index, follow">
+    <style>
+        :root {
+            --bg: #0a0a0a;
+            --accent: #ff3300;
+            --accent2: #ff6600;
+            --daisy: #00f0ff;
+            --telegram: #0088cc;
+            --text: #cccccc;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: var(--bg);
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        #canvas3d {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: block;
+            z-index: 0;
+        }
+        .hud {
+            position: fixed;
+            z-index: 10;
+            pointer-events: none;
+        }
+        .hud-top-left {
+            top: 20px;
+            left: 24px;
+        }
+        .hud-top-left h1 {
+            font-family: 'Arial Black', 'Impact', sans-serif;
+            font-size: 30px;
+            font-weight: 900;
+            color: #fff;
+            letter-spacing: 2px;
+            text-shadow: 0 0 30px rgba(255, 51, 0, 0.7), 0 2px 4px rgba(0,0,0,0.8);
+            margin-bottom: 2px;
+            line-height: 1;
+        }
+        .hud-top-left .subtitle {
+            font-size: 10px;
+            color: var(--accent);
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            text-shadow: 0 0 12px rgba(255, 51, 0, 0.5);
+        }
+        .kickstarter-badge {
+            display: inline-block;
+            margin-top: 8px;
+            background: #05ce78;
+            color: #000;
+            font-size: 10px;
+            font-weight: 800;
+            padding: 5px 14px;
+            border-radius: 3px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            pointer-events: all;
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(5, 206, 120, 0.4);
+            transition: all 0.3s ease;
+        }
+        .kickstarter-badge:hover {
+            box-shadow: 0 0 25px rgba(5, 206, 120, 0.7);
+            transform: scale(1.05);
+        }
+        .hud-info {
+            top: 20px;
+            right: 24px;
+            text-align: right;
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.4);
+            letter-spacing: 1px;
+            line-height: 2;
+        }
+        .hud-info span {
+            color: var(--accent);
+            font-weight: 700;
+        }
+        .hud-bottom {
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            pointer-events: all;
+            z-index: 10;
+        }
+        .hud-buttons {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .hud-btn {
+            background: rgba(20, 20, 20, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+            padding: 8px 18px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            white-space: nowrap;
+            pointer-events: all;
+        }
+        .hud-btn:hover {
+            background: var(--accent);
+            border-color: var(--accent);
+            box-shadow: 0 0 25px rgba(255, 51, 0, 0.5);
+            color: #fff;
+        }
+        .hud-btn.active {
+            background: var(--accent);
+            border-color: var(--accent);
+            box-shadow: 0 0 20px rgba(255, 51, 0, 0.4);
+        }
+        .slider-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(15, 15, 15, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 30px;
+            padding: 7px 18px;
+            backdrop-filter: blur(12px);
+            width: 400px;
+            max-width: 88vw;
+        }
+        .slider-label {
+            font-size: 9px;
+            color: #888;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            white-space: nowrap;
+            min-width: 24px;
+            text-align: center;
+        }
+        .slider-label.open {
+            color: var(--accent2);
+        }
+        input[type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+            flex: 1;
+            height: 5px;
+            background: linear-gradient(to right, #ff3300, #ff6600, #ffaa00);
+            border-radius: 3px;
+            outline: none;
+            cursor: pointer;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #fff;
+            border: 2px solid #ff3300;
+            cursor: pointer;
+            box-shadow: 0 0 18px rgba(255, 51, 0, 0.5);
+        }
+        .slider-value {
+            font-size: 15px;
+            font-weight: 700;
+            color: #fff;
+            min-width: 38px;
+            text-align: center;
+            font-family: 'Courier New', monospace;
+        }
+        .sound-dot {
+            display: inline-block;
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #05ce78;
+            animation: pulse-dot 1.2s infinite;
+            margin-right: 4px;
+        }
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        /* Telegram Widget */
+        .telegram-widget {
+            position: fixed;
+            bottom: 140px;
+            right: 20px;
+            z-index: 100;
+            pointer-events: all;
+        }
+        .telegram-bubble {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: var(--telegram);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            box-shadow: 0 0 20px rgba(0, 136, 204, 0.4);
+            transition: all 0.3s ease;
+            margin-left: auto;
+            position: relative;
+        }
+        .telegram-bubble:hover {
+            box-shadow: 0 0 35px rgba(0, 136, 204, 0.7);
+            transform: scale(1.08);
+        }
+        .telegram-bubble .pulse-ring {
+            position: absolute;
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            border: 2px solid var(--telegram);
+            animation: ring-pulse 2s infinite;
+        }
+        @keyframes ring-pulse {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(1.6); opacity: 0; }
+        }
+        .telegram-popup {
+            display: none;
+            position: absolute;
+            bottom: 64px;
+            right: 0;
+            width: 300px;
+            background: rgba(15, 17, 30, 0.96);
+            border: 1px solid var(--telegram);
+            border-radius: 14px;
+            box-shadow: 0 0 30px rgba(0, 136, 204, 0.2);
+            overflow: hidden;
+            backdrop-filter: blur(16px);
+        }
+        .telegram-popup.open {
+            display: block;
+        }
+        .telegram-popup-header {
+            background: rgba(0, 136, 204, 0.2);
+            padding: 14px 16px;
+            border-bottom: 1px solid rgba(0, 136, 204, 0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            color: #fff;
+            letter-spacing: 1px;
+        }
+        .telegram-popup-close {
+            background: none;
+            border: none;
+            color: #fff;
+            cursor: pointer;
+            font-size: 18px;
+        }
+        .telegram-popup-body {
+            padding: 18px;
+            text-align: center;
+            color: #ccc;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+        .telegram-popup-body strong {
+            color: var(--telegram);
+        }
+        .telegram-link-btn {
+            display: inline-block;
+            margin-top: 12px;
+            padding: 12px 24px;
+            background: var(--telegram);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 13px;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .telegram-link-btn:hover {
+            box-shadow: 0 0 20px rgba(0, 136, 204, 0.6);
+        }
+        .telegram-qr {
+            width: 100px;
+            height: 100px;
+            margin: 10px auto;
+            background: #fff;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            color: #333;
+        }
+
+        /* Legal Footer */
+        .legal-footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            z-index: 8;
+            pointer-events: all;
+            background: rgba(5, 5, 10, 0.9);
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 6px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            font-size: 9px;
+            color: rgba(255, 255, 255, 0.35);
+            letter-spacing: 0.5px;
+            gap: 6px;
+        }
+        .legal-footer a {
+            color: var(--daisy);
+            text-decoration: none;
+        }
+        .legal-footer a:hover {
+            text-decoration: underline;
+        }
+        .loading-screen {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 200;
+            color: #fff;
+            font-size: 13px;
+            letter-spacing: 3px;
+            font-family: 'Courier New', monospace;
+            transition: opacity 0.5s;
+        }
+        .loading-screen.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        @media (max-width: 768px) {
+            .hud-top-left h1 { font-size: 20px; }
+            .hud-top-left { top: 10px; left: 10px; }
+            .hud-info { top: 10px; right: 10px; font-size: 8px; }
+            .hud-bottom { bottom: 40px; gap: 6px; }
+            .hud-btn { padding: 6px 12px; font-size: 10px; }
+            .slider-container { width: 85vw; padding: 6px 12px; gap: 8px; }
+            .telegram-widget { bottom: 110px; right: 10px; }
+            .telegram-popup { width: 260px; bottom: 60px; }
+            .legal-footer { font-size: 7px; padding: 4px 10px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="loadingScreen" class="loading-screen">LOADING VORTEX X1...</div>
+    <canvas id="canvas3d"></canvas>
+
+    <!-- HUD -->
+    <div class="hud hud-top-left">
+        <h1>VORTEX X1</h1>
+        <div class="subtitle">Iris Throttle Body &bull; LS6</div>
+        <div class="kickstarter-badge" id="ksBadge">🚀 KICKSTARTER COMING SOON</div>
+    </div>
+    <div class="hud hud-info">
+        ENGINE: <span>CHEVY LS6 5.7L V8</span><br>
+        MECH: <span>12-BLADE IRIS</span><br>
+        COMPAT: <span>LS1–LS6</span><br>
+        STATUS: <span id="statusText">IDLE</span><br>
+        <span class="sound-dot"></span> AUDIO
+    </div>
+
+    <!-- Bottom Controls -->
+    <div class="hud hud-bottom">
+        <div class="slider-container">
+            <span class="slider-label">IDLE</span>
+            <input type="range" id="throttleSlider" min="0" max="100" value="0" step="1">
+            <span class="slider-value" id="sliderValue">0%</span>
+            <span class="slider-label open">WOT</span>
+        </div>
+        <div class="hud-buttons">
+            <button class="hud-btn active" id="btnCycle">▶ CYCLE</button>
+            <button class="hud-btn" id="btnOpen">FULL OPEN</button>
+            <button class="hud-btn" id="btnClose">FULL CLOSE</button>
+            <button class="hud-btn" id="btnWireframe">WIREFRAME</button>
+            <button class="hud-btn" id="btnSound" style="background:#05ce78;border-color:#05ce78;">🔊 ON</button>
+        </div>
+    </div>
+
+    <!-- Telegram Widget -->
+    <div class="telegram-widget" id="telegramWidget">
+        <div class="telegram-popup" id="telegramPopup">
+            <div class="telegram-popup-header">
+                <strong>💬 Chat with DaisyAI</strong>
+                <button class="telegram-popup-close" id="telegramClose">✕</button>
+            </div>
+            <div class="telegram-popup-body">
+                <p>Got questions about the <strong>Vortex X1</strong>?<br>Want to invest or get early access?</p>
+                <p>Message us on Telegram — <strong>Douglas Owens Jr.</strong> replies personally.</p>
+                <a class="telegram-link-btn" id="telegramLink" href="#" target="_blank">💬 OPEN TELEGRAM CHAT</a>
+                <p style="margin-top:10px;font-size:10px;color:rgba(255,255,255,0.4);">Or scan QR code in the Telegram app</p>
+                <div class="telegram-qr" id="telegramQR">@YourBot</div>
+            </div>
+        </div>
+        <div class="telegram-bubble" id="telegramBubble">
+            <span class="pulse-ring"></span>💬
+        </div>
+    </div>
+
+    <!-- Legal Footer -->
+    <div class="legal-footer">
+        <span>© 2026 Douglas Owens Jr. — OwenSonicInfinity. All Rights Reserved. Cleveland, OH 44089. 440-281-6270. Trademarks & Copyrights Reserved.</span>
+        <span>
+            <a href="mailto:owensonicinfinity@gmail.com">owensonicinfinity@gmail.com</a> &nbsp;|&nbsp;
+            <a href="https://owensonicinfinity.netlify.app" target="_blank">owensonicinfinity.netlify.app</a> &nbsp;|&nbsp;
+            <a href="#" id="legalTOS">Terms</a> &nbsp;|&nbsp;
+            <a href="#" id="legalPrivacy">Privacy</a>
+        </span>
+    </div>
+
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+            }
+        }
+    </script>
+
+    <script type="module">
+        import * as THREE from 'three';
+        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+        // =====================================================================
+        // ⚙️ CONFIG — PASTE YOUR VALUES HERE
+        // =====================================================================
+        const TELEGRAM_BOT_TOKEN = ''; // Paste bot token from @BotFather
+        const CREATOR_CHAT_ID = ''; // Paste your Telegram chat ID
+        const TELEGRAM_BOT_USERNAME = 'YourBot'; // Your bot's @username (no @)
+
+        // =====================================================================
+        // TELEGRAM WIDGET SETUP
+        // =====================================================================
+        const telegramLink = document.getElementById('telegramLink');
+        const telegramQR = document.getElementById('telegramQR');
+        const telegramBubble = document.getElementById('telegramBubble');
+        const telegramPopup = document.getElementById('telegramPopup');
+        const telegramClose = document.getElementById('telegramClose');
+
+        if (TELEGRAM_BOT_TOKEN && CREATOR_CHAT_ID) {
+            telegramLink.href = `https://t.me/${TELEGRAM_BOT_USERNAME}`;
+            telegramQR.textContent = `@${TELEGRAM_BOT_USERNAME}`;
+            console.log('✅ Telegram bot connected:', TELEGRAM_BOT_USERNAME);
+        } else {
+            telegramLink.href = 'https://t.me/';
+            telegramQR.textContent = 'Setup needed';
+            console.log('⚠️ Telegram bot not configured. Paste TELEGRAM_BOT_TOKEN and CREATOR_CHAT_ID.');
+        }
+
+        telegramBubble.addEventListener('click', () => {
+            telegramPopup.classList.toggle('open');
+        });
+
+        telegramClose.addEventListener('click', () => {
+            telegramPopup.classList.remove('open');
+        });
+
+        // Forward questions to creator via Telegram Bot API
+        async function forwardToCreator(name, email, message) {
+            if (!TELEGRAM_BOT_TOKEN || !CREATOR_CHAT_ID) return;
+            const text = `📩 *New Vortex X1 Inquiry*\n\n👤 *Name:* ${name}\n📧 *Email:* ${email}\n💬 *Message:* ${message}\n\n_Reply to this message to respond._`;
+            try {
+                await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        chat_id: CREATOR_CHAT_ID,
+                        text: text,
+                        parse_mode: 'Markdown'
+                    })
+                });
+                console.log('✅ Question forwarded to creator');
+            } catch (e) {
+                console.log('⚠️ Failed to forward:', e);
+            }
+        }
+
+        // Expose forward function globally
+        window.forwardToCreator = forwardToCreator;
+
+        // =====================================================================
+        // SCENE SETUP
+        // =====================================================================
+        const canvas = document.getElementById('canvas3d');
+        const loadingScreen = document.getElementById('loadingScreen');
+        const statusText = document.getElementById('statusText');
+        const sliderValueEl = document.getElementById('sliderValue');
+        const throttleSlider = document.getElementById('throttleSlider');
+
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x080810);
+        scene.fog = new THREE.Fog(0x080810, 4, 14);
+
+        const camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 0.1, 50);
+        camera.position.set(2.2, 1.4, 3.5);
+        camera.lookAt(0, 0.05, 0);
+
+        const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        renderer.toneMapping = THREE.ACESFilmicToneMapping;
+        renderer.toneMappingExposure = 1.1;
+
+        const controls = new OrbitControls(camera, renderer.domElement);
+        controls.target.set(0, 0.05, 0);
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.08;
+        controls.minDistance = 1.2;
+        controls.maxDistance = 8;
+        controls.maxPolarAngle = Math.PI * 0.7;
+        controls.update();
+
+        // Lighting
+        scene.add(new THREE.AmbientLight(0x222244, 1.2));
+        const keyLight = new THREE.DirectionalLight(0xffffff, 5);
+        keyLight.position.set(4, 4, 5);
+        keyLight.castShadow = true;
+        keyLight.shadow.mapSize.width = 2048;
+        keyLight.shadow.mapSize.height = 2048;
+        keyLight.shadow.camera.near = 0.1;
+        keyLight.shadow.camera.far = 25;
+        keyLight.shadow.camera.left = -5;
+        keyLight.shadow.camera.right = 5;
+        keyLight.shadow.camera.top = 5;
+        keyLight.shadow.camera.bottom = -5;
+        keyLight.shadow.bias = -0.0002;
+        keyLight.shadow.normalBias = 0.02;
+        scene.add(keyLight);
+        scene.add(new THREE.DirectionalLight(0x4488cc, 2).translateX(-2).translateY(1).translateZ(-1.5));
+        scene.add(new THREE.DirectionalLight(0xff4422, 2.5).translateY(-0.3).translateZ(-3));
+        scene.add(new THREE.DirectionalLight(0xffffff, 1.5).translateY(4));
+
+        const groundGeo = new THREE.PlaneGeometry(12, 12);
+        const ground = new THREE.Mesh(groundGeo, new THREE.MeshStandardMaterial({ color: 0x1a1a1a, roughness: 0.5, metalness: 0.2 }));
+        ground.rotation.x = -Math.PI / 2;
+        ground.position.y = -1.5;
+        ground.receiveShadow = true;
+        scene.add(ground);
+
+        // Materials
+        const matAluminum = new THREE.MeshStandardMaterial({ color: 0xc8c8c8, roughness: 0.22, metalness: 0.92 });
+        const matAluminumDark = new THREE.MeshStandardMaterial({ color: 0x909090, roughness: 0.28, metalness: 0.88 });
+        const matBlade = new THREE.MeshStandardMaterial({ color: 0xa0a0a0, roughness: 0.18, metalness: 0.95 });
+        const matMotor = new THREE.MeshStandardMaterial({ color: 0x2a2a2a, roughness: 0.45, metalness: 0.5 });
+        const matInnerBore = new THREE.MeshStandardMaterial({ color: 0x6a6a6a, roughness: 0.12, metalness: 0.85 });
+        const matFlange = new THREE.MeshStandardMaterial({ color: 0xb8b8b8, roughness: 0.26, metalness: 0.9 });
+        const matBlock = new THREE.MeshStandardMaterial({ color: 0x3a3a3a, roughness: 0.55, metalness: 0.6 });
+        const matValveCover = new THREE.MeshStandardMaterial({ color: 0x1a1a1a, roughness: 0.35, metalness: 0.3 });
+        const matIntake = new THREE.MeshStandardMaterial({ color: 0x9a9a9a, roughness: 0.3, metalness: 0.85 });
+        const matOilPan = new THREE.MeshStandardMaterial({ color: 0x2a2a2a, roughness: 0.5, metalness: 0.55 });
+        const matSteel = new THREE.MeshStandardMaterial({ color: 0x555555, roughness: 0.4, metalness: 0.7 });
+        const matBelt = new THREE.MeshStandardMaterial({ color: 0x111111, roughness: 0.7, metalness: 0.1 });
+
+        const mainGroup = new THREE.Group();
+        scene.add(mainGroup);
+
+        // Engine Stand
+        const standGroup = new THREE.Group();
+        standGroup.add(new THREE.Mesh(new THREE.BoxGeometry(1.2, 0.08, 0.8), matSteel).translateY(-1.15));
+        for (let i = 0; i < 4; i++) {
+            standGroup.add(new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.08, 0.05, 24), matSteel)
+                .rotateX(Math.PI / 2).translateX((i < 2 ? -1 : 1) * 0.55).translateY(-1.2).translateZ((i % 2 === 0 ? -1 : 1) * 0.35));
+        }
+        standGroup.add(new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.06, 1.1, 16), matSteel).translateY(-0.6));
+        standGroup.add(new THREE.Mesh(new THREE.BoxGeometry(0.7, 0.06, 0.06), matSteel).translateY(-0.1));
+        mainGroup.add(standGroup);
+
+        // Engine Block
+        const engineGroup = new THREE.Group();
+        engineGroup.position.y = -0.05;
+        engineGroup.add(new THREE.Mesh(new THREE.BoxGeometry(0.55, 0.55, 0.7), matBlock).translateY(0.25));
+        engineGroup.add(new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.2, 0.65), matOilPan).translateY(-0.1));
+        engineGroup.add(new THREE.Mesh(new THREE.BoxGeometry(0.35, 0.04, 0.55), matAluminumDark).translateY(0.54));
+
+        // Intake Manifold
+        const intakeGroup = new THREE.Group();
+        intakeGroup.position.y = 0.58;
+        intakeGroup.add(new THREE.Mesh(new THREE.BoxGeometry(0.3, 0.1, 0.6), matIntake));
+        intakeGroup.add(new THREE.Mesh(new THREE.BoxGeometry(0.26, 0.06, 0.56), matIntake).translateY(0.08));
+        for (let i = 0; i < 4; i++) {
+            const rx = -0.08 + i * 0.055;
+            intakeGroup.add(new THREE.Mesh(new THREE.CylinderGeometry(0.025, 0.025, 0.15, 16), matIntake).rotateX(Math.PI / 2).translateX(rx).translateY(-0.08).translateZ(0.22));
+            intakeGroup.add(new THREE.Mesh(new THREE.CylinderGeometry(0.025, 0.025, 0.15, 16), matIntake).rotateX(Math.PI / 2).translateX(rx).translateY(-0.08).translateZ(-0.22));
+        }
+        intakeGroup.add(new THREE.Mesh(new THREE.CylinderGeometry(0.28, 0.28, 0.04, 32), matFlange).rotateX(Math.PI / 2).translateY(0.03).translateZ(0.34));
+        engineGroup.add(intakeGroup);
+
+        // Valve Covers
+        const vcGeo = new THREE.BoxGeometry(0.18, 0.12, 0.6);
+        engineGroup.add(new THREE.Mesh(vcGeo, matValveCover).translateX(-0.32).translateY(0.5));
+        engineGroup.add(new THREE.Mesh(vcGeo, matValveCover).translateX(0.32).translateY(0.5));
+        for (let side = -1; side <= 1; side += 2) {
+            for (let i = 0; i < 4; i++) {
+                engineGroup.add(new THREE.Mesh(new THREE.BoxGeometry(0.04, 0.05, 0.06), matAluminumDark)
+                    .translateX(side * 0.38).translateY(0.56).translateZ(-0.18 + i * 0.12));
+            }
+        }
+
+        // Front Accessory
+        engineGroup.add(new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.12, 0.04, 32), matSteel).rotateX(Math.PI / 2).translateY(0.15).translateZ(0.4));
+        engineGroup.add(new THREE.Mesh(new THREE.TorusGeometry(0.13, 0.012, 16, 32), matBelt).translateY(0.15).translateZ(0.4));
+        mainGroup.add(engineGroup);
+
+        // Vortex X1 Throttle Body
+        const throttleGroup = new THREE.Group();
+        throttleGroup.position.set(0, 0.61, 0.34);
+        const housingGroup = new THREE.Group();
+        housingGroup.add(new THREE.Mesh(new THREE.CylinderGeometry(0.24, 0.24, 0.35, 64, 1, true), matAluminum));
+        housingGroup.add(new THREE.Mesh(new THREE.TorusGeometry(0.24, 0.02, 16, 64), matAluminum).translateZ(0.175));
+        housingGroup.add(new THREE.Mesh(new THREE.TorusGeometry(0.24, 0.02, 16, 64), matAluminum).translateZ(-0.175));
+        housingGroup.add(new THREE.Mesh(new THREE.CylinderGeometry(0.22, 0.22, 0.34, 64, 1, true), matInnerBore));
+        housingGroup.add(new THREE.Mesh(new THREE.CylinderGeometry(0.28, 0.28, 0.03, 64), matFlange).translateZ(0.19));
+        housingGroup.add(new THREE.Mesh(new THREE.CylinderGeometry(0.28, 0.28, 0.03, 64), matFlange).translateZ(-0.19));
+        for (let i = 0; i < 4; i++) {
+            const a = (i * Math.PI / 2) + Math.PI / 4;
+            const bx = Math.cos(a) * 0.21, by = Math.sin(a) * 0.21;
+            housingGroup.add(new THREE.Mesh(new THREE.CylinderGeometry(0.018, 0.018, 0.04, 16), matAluminumDark).translateX(bx).translateY(by).translateZ(0.19));
+            housingGroup.add(new THREE.Mesh(new THREE.CylinderGeometry(0.022, 0.022, 0.01, 16), matAluminumDark).translateX(bx).translateY(by).translateZ(0.21));
+        }
+        throttleGroup.add(housingGroup);
+
+        // Motor
+        const motorGroup = new THREE.Group();
+        motorGroup.add(new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.05, 0.14, 24), matMotor).rotateX(Math.PI / 2).translateX(0.27));
+        motorGroup.add(new THREE.Mesh(new THREE.CylinderGeometry(0.055, 0.055, 0.02, 24), matMotor).rotateX(Math.PI / 2).translateX(0.35));
+        motorGroup.add(new THREE.Mesh(new THREE.BoxGeometry(0.04, 0.06, 0.06), matAluminumDark).translateX(0.24));
+        throttleGroup.add(motorGroup);
+
+        // Iris Blades
+        const NUM_BLADES = 12;
+        const bladeGroup = new THREE.Group();
+        const blades = [];
+        for (let i = 0; i < NUM_BLADES; i++) {
+            const bm = new THREE.Mesh(new THREE.BoxGeometry(0.18, 0.28, 0.008), matBlade);
+            bm.userData = { index: i, baseAngle: (i / NUM_BLADES) * Math.PI * 2, pivotRadius: 0.215 };
+            bladeGroup.add(bm);
+            blades.push(bm);
+        }
+        throttleGroup.add(bladeGroup);
+        const innerRing = new THREE.Mesh(new THREE.TorusGeometry(0.215, 0.01, 16, 64), matAluminumDark);
+        throttleGroup.add(innerRing);
+        mainGroup.add(throttleGroup);
+
+        // Vapor Particles
+        const vaporGroup = new THREE.Group();
+        vaporGroup.position.copy(throttleGroup.position).add(new THREE.Vector3(0, 0, 0.22));
+        mainGroup.add(vaporGroup);
+        const vaporParticles = [];
+        const MAX_VAPOR = 80;
+        const vaporMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.25, depthWrite: false });
+        for (let i = 0; i < MAX_VAPOR; i++) {
+            const p = new THREE.Mesh(new THREE.SphereGeometry(0.008 + Math.random() * 0.03, 4, 4), vaporMaterial.clone());
+            p.visible = false;
+            p.userData = {
+                life: 0, maxLife: 0.3 + Math.random() * 0.7,
+                velocity: new THREE.Vector3((Math.random() - 0.5) * 0.15, (Math.random() - 0.5) * 0.15, -0.3 - Math.random() * 0.7),
+                spawnOffset: new THREE.Vector3((Math.random() - 0.5) * 0.35, (Math.random() - 0.5) * 0.35, -0.05 + Math.random() * 0.1)
+            };
+            vaporGroup.add(p);
+            vaporParticles.push(p);
+        }
+
+        function updateVapor(ratio, dt) {
+            const shouldSpawn = ratio >= 0.90;
+            const spawnRate = ratio >= 0.97 ? 0.5 : 0.15;
+            vaporParticles.forEach(p => {
+                if (p.userData.life > 0) {
+                    p.userData.life -= dt;
+                    if (p.userData.life <= 0) { p.visible = false;
+                        p.userData.life = 0; } else {
+                        const prog = 1 - (p.userData.life / p.userData.maxLife);
+                        p.position.add(p.userData.velocity.clone().multiplyScalar(dt));
+                        p.material.opacity = 0.25 * (1 - prog) * (ratio - 0.88) * 8;
+                        p.scale.setScalar(1 + prog * 1.5);
+                    }
+                } else if (shouldSpawn && Math.random() < spawnRate * dt * 60) {
+                    p.position.copy(p.userData.spawnOffset);
+                    p.userData.life = p.userData.maxLife;
+                    p.visible = true;
+                    p.scale.setScalar(1);
+                    p.material.opacity = 0.15;
+                }
+            });
+            vaporGroup.visible = ratio >= 0.88;
+        }
+
+        // State
+        let targetOpenRatio = 0, currentOpenRatio = 0, isWireframe = false, cycleMode = 'manual',
+            soundEnabled = true, lastTime = performance.now();
+        const allMaterials = [];
+
+        function collectMaterials(obj) { obj.traverse(c => { if (c.isMesh && c.material && !allMaterials.includes(c)) allMaterials.push(
+                c); }); }
+        collectMaterials(mainGroup);
+
+        function setWireframe(enabled) {
+            isWireframe = enabled;
+            allMaterials.forEach(m => {
+                if (m.material && m.material.isMaterial && m.material !== vaporMaterial) {
+                    m.material.wireframe = enabled;
+                    if (enabled) { m.material._origOpacity = m.material.opacity;
+                        m.material.opacity = 0.7;
+                        m.material.transparent = true; } else { m.material.opacity = m.material
+                            ._origOpacity || 1;
+                        m.material.transparent = false; }
+                }
+            });
+        }
+
+        function updateBlades(ratio) {
+            const ce = 0.205, oe = 0.01;
+            blades.forEach(b => {
+                const ud = b.userData,
+                    a = ud.baseAngle;
+                const ext = oe + (1 - ratio) * (ce - oe);
+                b.position.set(Math.cos(a) * (ud.pivotRadius - ext), Math.sin(a) * (ud.pivotRadius - ext),
+                0);
+                b.rotation.z = a - Math.PI / 2 + (1 - ratio) * 0.15;
+                b.scale.set(1, 0.3 + ratio * 0.7, 1);
+            });
+            innerRing.scale.setScalar(0.7 + ratio * 0.3);
+        }
+
+        // Audio
+        let audioCtx = null,
+        engineNodes = null;
+
+        function initAudio() {
+            if (audioCtx) return;
+            audioCtx = new(window.AudioContext || window.webkitAudioContext)();
+            const mg = audioCtx.createGain();
+            mg.gain.value = 0.10;
+            mg.connect(audioCtx.destination);
+            const mo = audioCtx.createOscillator();
+            mo.type = 'sawtooth';
+            mo.frequency.value = 80;
+            mo.start();
+            const so = audioCtx.createOscillator();
+            so.type = 'triangle';
+            so.frequency.value = 40;
+            so.start();
+            const tg = audioCtx.createGain();
+            tg.gain.value = 0.6;
+            const sg = audioCtx.createGain();
+            sg.gain.value = 0.3;
+            const ds = audioCtx.createWaveShaper();
+            ds.curve = (() => { const s = 256,
+                    c = new Float32Array(s); for (let i = 0; i < s; i++) { const x = (i * 2) / s - 1;
+                    c[i] = ((Math.PI + 50) * x) / (Math.PI + 50 * Math.abs(x)); } return c; })();
+            ds.oversample = '4x';
+            const fl = audioCtx.createBiquadFilter();
+            fl.type = 'lowpass';
+            fl.frequency.value = 400;
+            fl.Q.value = 1;
+            mo.connect(tg);
+            so.connect(sg);
+            tg.connect(fl);
+            sg.connect(fl);
+            fl.connect(ds);
+            ds.connect(mg);
+            engineNodes = { mo, so, tg, sg, fl, mg, ds };
+        }
+
+        function updateEngineSound(ratio) {
+            if (!audioCtx || !engineNodes) return;
+            if (!soundEnabled) { engineNodes.mg.gain.setTargetAtTime(0, audioCtx.currentTime, 0.05); return; }
+            const rpm = 700 + ratio * 6500,
+                ff = (rpm / 60) * 4,
+                bf = ff / 4;
+            engineNodes.mo.frequency.setTargetAtTime(bf * 2, audioCtx.currentTime, 0.05);
+            engineNodes.so.frequency.setTargetAtTime(bf, audioCtx.currentTime, 0.05);
+            engineNodes.fl.frequency.setTargetAtTime(200 + ratio * 3000, audioCtx.currentTime, 0.08);
+            engineNodes.mg.gain.setTargetAtTime(0.04 + ratio * 0.16, audioCtx.currentTime, 0.06);
+            engineNodes.sg.gain.setTargetAtTime(0.3 - ratio * 0.2, audioCtx.currentTime, 0.05);
+        }
+
+        function toggleSound() {
+            soundEnabled = !soundEnabled;
+            const btn = document.getElementById('btnSound');
+            if (soundEnabled) { if (!audioCtx) initAudio();
+                btn.textContent = '🔊 ON';
+                btn.style.background = '#05ce78';
+                btn.style.borderColor = '#05ce78';
+                updateEngineSound(currentOpenRatio); } else { btn.textContent = '🔇 OFF';
+                btn.style.background = '#555';
+                btn.style.borderColor = '#555'; if (engineNodes) engineNodes.mg.gain.setTargetAtTime(0, audioCtx
+                    .currentTime, 0.05); }
+        }
+
+        function setThrottle(ratio) {
+            cycleMode = 'manual';
+            targetOpenRatio = Math.max(0, Math.min(1, ratio));
+            throttleSlider.value = Math.round(targetOpenRatio * 100);
+            sliderValueEl.textContent = Math.round(targetOpenRatio * 100) + '%';
+            document.getElementById('btnCycle').textContent = '▶ CYCLE';
+            document.getElementById('btnCycle').classList.remove('active');
+            if (!audioCtx && soundEnabled) initAudio();
+        }
+        window.setThrottle = setThrottle;
+
+        // Animation
+        function animate(time) {
+            requestAnimationFrame(animate);
+            const dt = Math.min((time - lastTime) / 1000, 0.1);
+            lastTime = time;
+            if (cycleMode === 'auto') {
+                const t = (time * 0.001) % (Math.PI * 2);
+                targetOpenRatio = (Math.sin(t * 0.6) + 1) / 2;
+                throttleSlider.value = Math.round(targetOpenRatio * 100);
+                sliderValueEl.textContent = Math.round(targetOpenRatio * 100) + '%';
+            }
+            currentOpenRatio += (targetOpenRatio - currentOpenRatio) * 0.08;
+            if (Math.abs(targetOpenRatio - currentOpenRatio) < 0.0005) currentOpenRatio = targetOpenRatio;
+            updateBlades(currentOpenRatio);
+            updateEngineSound(currentOpenRatio);
+            updateVapor(currentOpenRatio, dt);
+            const pct = Math.round(currentOpenRatio * 100);
+            if (pct < 5) statusText.textContent = 'IDLE';
+            else if (pct > 95) statusText.textContent = 'WOT 🔥';
+            else statusText.textContent = `THROTTLE ${pct}%`;
+            if (cycleMode === 'manual') mainGroup.rotation.y += 0.0008;
+            controls.update();
+            renderer.render(scene, camera);
+        }
+
+        // Events
+        throttleSlider.addEventListener('input', () => setThrottle(parseInt(throttleSlider.value) / 100));
+        document.getElementById('btnCycle').addEventListener('click', function() {
+            cycleMode = cycleMode === 'auto' ? 'manual' : 'auto';
+            this.textContent = cycleMode === 'auto' ? '⏸ STOP' : '▶ CYCLE';
+            this.classList.toggle('active', cycleMode === 'auto');
+            if (cycleMode === 'auto' && !audioCtx && soundEnabled) initAudio();
+            else if (cycleMode === 'manual') targetOpenRatio = currentOpenRatio;
+        });
+        document.getElementById('btnOpen').addEventListener('click', () => setThrottle(1));
+        document.getElementById('btnClose').addEventListener('click', () => setThrottle(0));
+        document.getElementById('btnWireframe').addEventListener('click', function() {
+            setWireframe(!isWireframe);
+            this.classList.toggle('active', isWireframe);
+            this.textContent = isWireframe ? 'SOLID' : 'WIREFRAME';
+        });
+        document.getElementById('btnSound').addEventListener('click', toggleSound);
+        document.getElementById('ksBadge').addEventListener('click', () => alert(
+            '🚀 Kickstarter coming soon! Message us on Telegram for early access.'));
+        document.getElementById('legalTOS').addEventListener('click', e => { e.preventDefault();
+            alert(
+                'Terms of Service: OwenSonicInfinity provides this visualization for informational purposes. All Vortex X1 designs are proprietary. Contact owensonicinfinity@gmail.com.'
+                ); });
+        document.getElementById('legalPrivacy').addEventListener('click', e => { e.preventDefault();
+            alert(
+                'Privacy: No data is collected from this page. Telegram messages are forwarded directly to the creator.'
+                ); });
+        window.addEventListener('keydown', e => {
+            switch (e.key.toLowerCase()) {
+                case 'o':
+                    setThrottle(1);
+                    break;
+                case 'c':
+                    setThrottle(0);
+                    break;
+                case ' ':
+                    e.preventDefault();
+                    cycleMode = cycleMode === 'auto' ? 'manual' : 'auto';
+                    if (cycleMode === 'auto' && !audioCtx && soundEnabled) initAudio();
+                    document.getElementById('btnCycle').textContent = cycleMode === 'auto' ? '⏸ STOP' :
+                        '▶ CYCLE';
+                    break;
+                case 'w':
+                    setWireframe(!isWireframe);
+                    break;
+                case 'm':
+                    toggleSound();
+                    break;
+                case 'r':
+                    camera.position.set(2.2, 1.4, 3.5);
+                    controls.target.set(0, 0.05, 0);
+                    controls.update();
+                    break;
+            }
+        });
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // Start
+        loadingScreen.classList.add('hidden');
+        setTimeout(() => loadingScreen.remove(), 500);
+        updateBlades(0);
+        requestAnimationFrame(animate);
+        console.log('🔥 Vortex X1 + LS6 + DaisyAI Telegram Bot Ready');
+        console.log('   Creator: Douglas Owens Jr. | Cleveland OH');
+        console.log('   Contact: owensonicinfinity@gmail.com');
+    </script>
+</body>
+  </html>
