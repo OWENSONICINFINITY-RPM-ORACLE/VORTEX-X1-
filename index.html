@@ -402,12 +402,12 @@
             <button id="detailsBtn">DETAILS (D)</button>
         </div>
         <div class="slider-container">
-            <label>THROTTLE POSITION</label>
+            <label>IRIS OPENING</label>
             <input type="range" id="throttleSlider" min="0" max="100" step="1" value="0">
-            <div class="throttle-value" id="throttlePercent">0°</div>
+            <div class="throttle-value" id="throttlePercent">IDLE (2mm)</div>
         </div>
         <div class="badge">
-            LS1 THROTTLE BODY · 75mm BORE · OEM SPEC
+            LS1 IRIS THROTTLE · 75mm BORE · OEM SPEC
         </div>
     </div>
     
@@ -418,7 +418,7 @@
     <div class="help-modal" id="helpModal">
         <button class="close-btn" id="closeHelp">✕</button>
         <div class="help-content">
-            <h2>LS1 Throttle Control</h2>
+            <h2>LS1 Iris Throttle Control</h2>
             
             <h3>MOUSE & TOUCH</h3>
             <div class="shortcut">
@@ -437,11 +437,11 @@
             <h3>KEYBOARD</h3>
             <div class="shortcut">
                 <span class="shortcut-key">O</span>
-                <span class="shortcut-desc">Full open (90°)</span>
+                <span class="shortcut-desc">Full open (blades retract)</span>
             </div>
             <div class="shortcut">
                 <span class="shortcut-key">C</span>
-                <span class="shortcut-desc">Full close (0°)</span>
+                <span class="shortcut-desc">Idle (2mm hole)</span>
             </div>
             <div class="shortcut">
                 <span class="shortcut-key">SPACE</span>
@@ -459,11 +459,14 @@
                 <span class="shortcut-key">?</span>
                 <span class="shortcut-desc">Show help</span>
             </div>
+            
+            <h3>IRIS BLADES</h3>
+            <p>At idle: 2mm center hole. At full throttle: blades retract into throttle body walls completely.</p>
         </div>
     </div>
     
     <div class="footer-legal">
-        © 2026 Douglas Owens Jr. — Realistic LS1 Throttle Body Visualization
+        © 2026 Douglas Owens Jr. — Realistic LS1 Iris Throttle Body Visualization
     </div>
 
     <script type="importmap">
@@ -542,7 +545,7 @@
         scene.add(rimLight);
         
         // ============================================
-        // MATERIALS - ALUMINUM & COMPONENTS
+        // MATERIALS
         // ============================================
         const aluminumMaterial = new THREE.MeshStandardMaterial({
             color: 0xb8b8b8,
@@ -551,9 +554,9 @@
             envMapIntensity: 1.0
         });
         
-        const brassMaterial = new THREE.MeshStandardMaterial({
-            color: 0xc89664,
-            metalness: 0.92,
+        const irisBladesMaterial = new THREE.MeshStandardMaterial({
+            color: 0xa89968,
+            metalness: 0.88,
             roughness: 0.25
         });
         
@@ -570,7 +573,7 @@
         });
         
         // ============================================
-        // LS1 THROTTLE BODY - REALISTIC GEOMETRY
+        // LS1 THROTTLE BODY - IRIS BLADES ONLY
         // ============================================
         const throttleGroup = new THREE.Group();
         
@@ -607,13 +610,43 @@
             throttleGroup.add(holeMesh);
         }
         
-        // Throttle plate butterfly (brass)
-        const plateGeometry = new THREE.BoxGeometry(70, 60, 2);
-        const plateMesh = new THREE.Mesh(plateGeometry, brassMaterial);
-        plateMesh.castShadow = true;
-        plateMesh.receiveShadow = true;
-        throttleGroup.add(plateMesh);
-        plateMesh.userData = { isThrottlePlate: true };
+        // ============================================
+        // IRIS BLADES (9-BLADE CONFIGURATION)
+        // ============================================
+        const irisBlades = [];
+        const BLADE_COUNT = 9;
+        const IDLE_RETRACT = 30; // mm retracted at idle
+        const BORE_RADIUS = 37.5;
+        const BLADE_LENGTH = 35; // mm
+        const BLADE_WIDTH = 8; // mm
+        
+        const angleStep = (Math.PI * 2) / BLADE_COUNT;
+        
+        for (let i = 0; i < BLADE_COUNT; i++) {
+            const bladeGeometry = new THREE.BoxGeometry(BLADE_WIDTH, BLADE_LENGTH, 2);
+            const bladeMat = irisBladesMaterial.clone();
+            const blade = new THREE.Mesh(bladeGeometry, bladeMat);
+            
+            const pivotAngle = i * angleStep;
+            const pivotX = Math.cos(pivotAngle) * (BORE_RADIUS - 10);
+            const pivotZ = Math.sin(pivotAngle) * (BORE_RADIUS - 10);
+            
+            blade.position.set(pivotX, 0, pivotZ);
+            blade.rotation.y = pivotAngle;
+            blade.castShadow = true;
+            blade.receiveShadow = true;
+            
+            blade.userData = {
+                pivotX,
+                pivotZ,
+                pivotAngle,
+                originalPos: { x: pivotX, z: pivotZ },
+                angle: 0
+            };
+            
+            throttleGroup.add(blade);
+            irisBlades.push(blade);
+        }
         
         // TPS sensor housing (black plastic on side)
         const tpsSensorGeometry = new THREE.BoxGeometry(12, 15, 20);
@@ -646,22 +679,6 @@
         vacPort2.castShadow = true;
         throttleGroup.add(vacPort2);
         
-        // Throttle shaft and arm
-        const shaftGeometry = new THREE.CylinderGeometry(4, 4, 90, 16);
-        const shaftMesh = new THREE.Mesh(shaftGeometry, steelMaterial);
-        shaftMesh.rotation.z = Math.PI / 2;
-        shaftMesh.castShadow = true;
-        shaftMesh.receiveShadow = true;
-        throttleGroup.add(shaftMesh);
-        
-        // Cable linkage arm
-        const armGeometry = new THREE.BoxGeometry(10, 8, 60);
-        const armMesh = new THREE.Mesh(armGeometry, aluminumMaterial);
-        armMesh.position.set(-50, 0, 0);
-        armMesh.castShadow = true;
-        armMesh.receiveShadow = true;
-        throttleGroup.add(armMesh);
-        
         scene.add(throttleGroup);
         
         // ============================================
@@ -686,21 +703,39 @@
         let cycleInterval = null;
         let showDetails = false;
         
-        function updateThrottlePosition(percent) {
-            percent = Math.max(0, Math.min(100, percent));
-            currentThrottle = percent;
+        function updateIrisBlades(throttlePercent) {
+            throttlePercent = Math.max(0, Math.min(100, throttlePercent));
+            currentThrottle = throttlePercent;
             
-            // Throttle plate rotation (0-90 degrees)
-            const rotationAngle = (percent / 100) * Math.PI / 2;
-            throttleGroup.children.forEach(child => {
-                if (child.userData.isThrottlePlate) {
-                    child.rotation.y = rotationAngle;
-                }
+            // At 0%: 2mm hole (blades closed) - retract inward
+            // At 100%: fully open (blades disappear into walls) - retract outward
+            const retractAmount = (throttlePercent / 100) * (BORE_RADIUS - 2);
+            
+            irisBlades.forEach(blade => {
+                const data = blade.userData;
+                
+                // Blades retract radially outward as throttle opens
+                // At idle (0%), tight around center
+                // At full (100%), they collapse into the wall
+                const retractFactor = throttlePercent / 100;
+                const newDist = BORE_RADIUS - 10 - retractAmount;
+                
+                blade.position.x = Math.cos(data.pivotAngle) * newDist;
+                blade.position.z = Math.sin(data.pivotAngle) * newDist;
+                
+                // Slight rotation as they retract
+                blade.rotation.z = retractFactor * 0.3;
             });
             
             // Update UI
-            document.getElementById('throttleSlider').value = percent;
-            document.getElementById('throttlePercent').innerText = Math.round(percent) + '°';
+            document.getElementById('throttleSlider').value = throttlePercent;
+            if (throttlePercent === 0) {
+                document.getElementById('throttlePercent').innerText = 'IDLE (2mm)';
+            } else if (throttlePercent === 100) {
+                document.getElementById('throttlePercent').innerText = 'WIDE OPEN';
+            } else {
+                document.getElementById('throttlePercent').innerText = Math.round(throttlePercent) + '%';
+            }
         }
         
         // ============================================
@@ -717,17 +752,17 @@
         
         slider.addEventListener('input', (e) => {
             if (cycleActive) stopCycle();
-            updateThrottlePosition(parseFloat(e.target.value));
+            updateIrisBlades(parseFloat(e.target.value));
         });
         
         fullOpenBtn.addEventListener('click', () => {
             if (cycleActive) stopCycle();
-            updateThrottlePosition(90);
+            updateIrisBlades(100);
         });
         
         fullCloseBtn.addEventListener('click', () => {
             if (cycleActive) stopCycle();
-            updateThrottlePosition(0);
+            updateIrisBlades(0);
         });
         
         function startCycle() {
@@ -739,14 +774,14 @@
             let direction = 1;
             cycleInterval = setInterval(() => {
                 currentThrottle += direction * 2;
-                if (currentThrottle >= 90) {
+                if (currentThrottle >= 100) {
                     direction = -1;
-                    currentThrottle = 90;
+                    currentThrottle = 100;
                 } else if (currentThrottle <= 0) {
                     direction = 1;
                     currentThrottle = 0;
                 }
-                updateThrottlePosition(currentThrottle);
+                updateIrisBlades(currentThrottle);
             }, 50);
         }
         
@@ -779,8 +814,8 @@
         // Keyboard controls
         document.addEventListener('keydown', (e) => {
             const key = e.key.toLowerCase();
-            if (key === 'o') updateThrottlePosition(90);
-            else if (key === 'c') updateThrottlePosition(0);
+            if (key === 'o') updateIrisBlades(100);
+            else if (key === 'c') updateIrisBlades(0);
             else if (key === ' ') {
                 e.preventDefault();
                 if (cycleActive) stopCycle();
