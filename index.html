@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, touch-action=none">
-    <title>Vortex X1 Iris Throttle Body - 9-Blade Precision</title>
+    <title>LS1 Throttle Body - Photorealistic Visualization</title>
     <style>
         * {
             box-sizing: border-box;
@@ -13,7 +13,7 @@
             margin: 0;
             overflow: hidden;
             font-family: 'Segoe UI', 'Roboto', 'Inter', system-ui, -apple-system, sans-serif;
-            background: #050b1a;
+            background: #1a1a1a;
         }
         
         canvas {
@@ -28,7 +28,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, #050b1a 0%, #0f1f3a 100%);
+            background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -44,8 +44,8 @@
         .loading-spinner {
             width: 60px;
             height: 60px;
-            border: 3px solid rgba(255, 77, 46, 0.2);
-            border-top-color: #ff4d2e;
+            border: 3px solid rgba(200, 150, 100, 0.2);
+            border-top-color: #c89664;
             border-radius: 50%;
             animation: spin 1s linear infinite;
             margin-bottom: 20px;
@@ -56,7 +56,7 @@
         }
         
         .loading-text {
-            color: #ccc;
+            color: #c89664;
             font-size: 14px;
             letter-spacing: 2px;
             font-family: monospace;
@@ -68,19 +68,19 @@
             bottom: 20px;
             left: 20px;
             right: 20px;
-            background: rgba(10, 10, 15, 0.88);
+            background: rgba(20, 20, 20, 0.92);
             backdrop-filter: blur(14px);
-            border-radius: 28px;
+            border-radius: 12px;
             padding: 16px 24px;
-            color: white;
+            color: #c89664;
             z-index: 10;
             display: flex;
             flex-wrap: wrap;
             justify-content: space-between;
             align-items: center;
             gap: 16px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(200, 150, 100, 0.3);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.8);
             font-weight: 500;
             pointer-events: auto;
             animation: slideUp 0.5s ease-out 2.5s backwards;
@@ -99,24 +99,26 @@
         }
         
         button {
-            background: rgba(30, 30, 40, 0.9);
-            border: 1px solid rgba(255, 255, 255, 0.25);
-            color: white;
+            background: rgba(50, 40, 30, 0.9);
+            border: 1px solid rgba(200, 150, 100, 0.4);
+            color: #c89664;
             padding: 8px 16px;
-            border-radius: 40px;
+            border-radius: 6px;
             cursor: pointer;
             font-size: 14px;
             font-weight: 600;
-            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transition: all 0.3s ease;
             backdrop-filter: blur(4px);
             letter-spacing: 0.5px;
+            font-family: 'Courier New', monospace;
         }
         
         button:hover {
-            background: #ff4d2e;
-            border-color: #ff7a5c;
-            transform: scale(1.04);
-            box-shadow: 0 4px 16px rgba(255, 77, 46, 0.5);
+            background: #c89664;
+            border-color: #d4a574;
+            color: #1a1a1a;
+            transform: scale(1.02);
+            box-shadow: 0 4px 16px rgba(200, 150, 100, 0.4);
         }
         
         button:active {
@@ -127,25 +129,28 @@
             display: flex;
             align-items: center;
             gap: 15px;
-            background: rgba(0, 0, 0, 0.5);
-            padding: 5px 16px;
-            border-radius: 40px;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 8px 16px;
+            border-radius: 6px;
             backdrop-filter: blur(4px);
+            border: 1px solid rgba(200, 150, 100, 0.2);
         }
         
         .slider-container label {
-            font-size: 14px;
-            font-weight: 600;
+            font-size: 12px;
+            font-weight: 700;
             letter-spacing: 1px;
             white-space: nowrap;
+            font-family: 'Courier New', monospace;
+            color: #c89664;
         }
         
         input[type="range"] {
-            width: 260px;
-            height: 6px;
+            width: 200px;
+            height: 5px;
             -webkit-appearance: none;
             appearance: none;
-            background: linear-gradient(90deg, #00ff00, #ffaa00, #ff3300);
+            background: linear-gradient(90deg, #666 0%, #c89664 50%, #8b6914 100%);
             border-radius: 5px;
             outline: none;
             cursor: pointer;
@@ -154,94 +159,49 @@
         input[type="range"]::-webkit-slider-thumb {
             -webkit-appearance: none;
             appearance: none;
-            width: 20px;
-            height: 20px;
+            width: 18px;
+            height: 18px;
             border-radius: 50%;
-            background: white;
-            border: 2px solid #ff4d2e;
-            box-shadow: 0 0 10px #ff4d2e;
+            background: #c89664;
+            border: 2px solid #8b6914;
+            box-shadow: 0 0 8px rgba(200, 150, 100, 0.6);
             cursor: pointer;
             transition: all 0.2s ease;
         }
         
         input[type="range"]::-moz-range-thumb {
-            width: 20px;
-            height: 20px;
+            width: 18px;
+            height: 18px;
             border-radius: 50%;
-            background: white;
-            border: 2px solid #ff4d2e;
-            box-shadow: 0 0 10px #ff4d2e;
+            background: #c89664;
+            border: 2px solid #8b6914;
+            box-shadow: 0 0 8px rgba(200, 150, 100, 0.6);
             cursor: pointer;
         }
         
         .throttle-value {
-            background: #000000aa;
+            background: #000000cc;
             padding: 6px 14px;
-            border-radius: 32px;
+            border-radius: 4px;
             font-family: 'Courier New', monospace;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             font-weight: bold;
-            color: #ffaa44;
-            min-width: 75px;
+            color: #c89664;
+            min-width: 65px;
             text-align: center;
             letter-spacing: 1px;
-        }
-        
-        .status-led {
-            display: inline-block;
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background-color: #4caf50;
-            box-shadow: 0 0 8px #4caf50;
-            margin-right: 8px;
-            animation: pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-        }
-        
-        @keyframes pulse {
-            0%, 100% { opacity: 0.6; transform: scale(0.95); }
-            50% { opacity: 1; transform: scale(1.15); }
+            border: 1px solid rgba(200, 150, 100, 0.3);
         }
         
         .badge {
-            font-size: 12px;
-            background: #00000066;
-            padding: 6px 14px;
-            border-radius: 20px;
+            font-size: 11px;
+            background: #00000077;
+            padding: 6px 12px;
+            border-radius: 4px;
             font-family: 'Courier New', monospace;
             letter-spacing: 0.5px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .telegram-bubble {
-            position: fixed;
-            bottom: 24px;
-            right: 24px;
-            background: linear-gradient(135deg, #0088cc, #00b4d8);
-            width: 56px;
-            height: 56px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            box-shadow: 0 4px 20px rgba(0, 136, 204, 0.5);
-            z-index: 20;
-            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            animation: slideUp 0.5s ease-out 2.5s backwards;
-        }
-        
-        .telegram-bubble:hover {
-            transform: scale(1.12);
-            background: linear-gradient(135deg, #2aabee, #00d4ff);
-            box-shadow: 0 8px 24px rgba(0, 136, 204, 0.7);
-        }
-        
-        .telegram-bubble svg {
-            width: 32px;
-            height: 32px;
-            fill: white;
+            border: 1px solid rgba(200, 150, 100, 0.2);
+            color: #999;
         }
         
         .instruction-tip {
@@ -250,21 +210,21 @@
             right: 20px;
             background: rgba(0, 0, 0, 0.7);
             padding: 8px 14px;
-            border-radius: 20px;
-            font-size: 12px;
-            color: #aaa;
+            border-radius: 6px;
+            font-size: 11px;
+            color: #c89664;
             pointer-events: auto;
             font-family: 'Courier New', monospace;
             z-index: 10;
             cursor: pointer;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(200, 150, 100, 0.3);
             transition: all 0.2s ease;
             animation: slideDown 0.5s ease-out 2.5s backwards;
         }
         
         .instruction-tip:hover {
             background: rgba(0, 0, 0, 0.85);
-            border-color: rgba(255, 255, 255, 0.3);
+            border-color: rgba(200, 150, 100, 0.5);
             transform: scale(1.05);
         }
         
@@ -280,7 +240,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(5, 11, 26, 0.95);
+            background: rgba(26, 26, 26, 0.96);
             backdrop-filter: blur(8px);
             display: none;
             flex-direction: column;
@@ -300,31 +260,33 @@
         }
         
         .help-content {
-            background: rgba(10, 10, 15, 0.9);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 20px;
+            background: rgba(30, 30, 30, 0.95);
+            border: 1px solid rgba(200, 150, 100, 0.3);
+            border-radius: 8px;
             padding: 40px;
             max-width: 500px;
             max-height: 80vh;
             overflow-y: auto;
-            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.8);
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.9);
         }
         
         .help-content h2 {
-            color: #ff4d2e;
+            color: #c89664;
             margin-top: 0;
             letter-spacing: 1px;
+            font-family: 'Courier New', monospace;
         }
         
         .help-content h3 {
-            color: #ffaa44;
+            color: #d4a574;
             margin-top: 20px;
-            font-size: 14px;
+            font-size: 13px;
+            font-family: 'Courier New', monospace;
         }
         
         .help-content p {
-            color: #ccc;
-            font-size: 13px;
+            color: #aaa;
+            font-size: 12px;
             line-height: 1.6;
             margin: 8px 0;
         }
@@ -334,22 +296,22 @@
             justify-content: space-between;
             align-items: center;
             padding: 8px 12px;
-            background: rgba(255, 77, 46, 0.1);
-            border-radius: 8px;
+            background: rgba(200, 150, 100, 0.08);
+            border-radius: 4px;
             margin: 6px 0;
-            border-left: 3px solid #ff4d2e;
+            border-left: 2px solid #c89664;
             font-family: 'Courier New', monospace;
-            font-size: 12px;
+            font-size: 11px;
         }
         
         .shortcut-key {
-            color: #ffaa44;
+            color: #c89664;
             font-weight: bold;
             min-width: 60px;
         }
         
         .shortcut-desc {
-            color: #aaa;
+            color: #888;
             text-align: right;
         }
         
@@ -357,9 +319,9 @@
             position: absolute;
             top: 20px;
             right: 20px;
-            background: rgba(255, 77, 46, 0.2);
-            border: 1px solid #ff4d2e;
-            color: #ff4d2e;
+            background: rgba(200, 150, 100, 0.15);
+            border: 1px solid #c89664;
+            color: #c89664;
             width: 36px;
             height: 36px;
             border-radius: 50%;
@@ -369,11 +331,12 @@
             align-items: center;
             justify-content: center;
             transition: all 0.2s ease;
+            font-family: 'Courier New', monospace;
         }
         
         .close-btn:hover {
-            background: #ff4d2e;
-            color: white;
+            background: #c89664;
+            color: #1a1a1a;
             transform: scale(1.1);
         }
         
@@ -408,124 +371,101 @@
             }
         }
         
-        a {
-            color: #ffaa44;
-            text-decoration: none;
-        }
-        
-        a:hover {
-            text-decoration: underline;
-        }
-        
         .footer-legal {
             position: absolute;
             bottom: 12px;
             left: 12px;
             font-size: 9px;
-            color: #888;
-            background: rgba(0, 0, 0, 0.5);
+            color: #666;
+            background: rgba(0, 0, 0, 0.6);
             padding: 6px 12px;
-            border-radius: 12px;
+            border-radius: 4px;
             pointer-events: none;
             z-index: 10;
             font-family: 'Courier New', monospace;
             letter-spacing: 0.5px;
+            border: 1px solid rgba(200, 150, 100, 0.15);
         }
     </style>
 </head>
 <body>
     <div class="loading-screen">
         <div class="loading-spinner"></div>
-        <div class="loading-text">INITIALIZING VORTEX X1</div>
+        <div class="loading-text">LOADING LS1 THROTTLE BODY</div>
     </div>
     
     <div class="ui-panel">
         <div class="controls-group">
-            <button id="fullOpenBtn">🔥 FULL OPEN (O)</button>
-            <button id="fullCloseBtn">❄️ FULL CLOSE (C)</button>
-            <button id="cycleBtn">▶ CYCLE (Space)</button>
-            <button id="wireframeBtn">🔲 WIREFRAME (W)</button>
-            <button id="muteBtn">🔊 ON (M)</button>
+            <button id="fullOpenBtn">FULL OPEN (O)</button>
+            <button id="fullCloseBtn">FULL CLOSE (C)</button>
+            <button id="cycleBtn">CYCLE (Space)</button>
+            <button id="detailsBtn">DETAILS (D)</button>
         </div>
         <div class="slider-container">
-            <label>⚙️ THROTTLE</label>
-            <input type="range" id="throttleSlider" min="0" max="100" step="0.5" value="0">
-            <div class="throttle-value" id="throttlePercent">0%</div>
+            <label>THROTTLE POSITION</label>
+            <input type="range" id="throttleSlider" min="0" max="100" step="1" value="0">
+            <div class="throttle-value" id="throttlePercent">0°</div>
         </div>
         <div class="badge">
-            <span class="status-led"></span> VORTEX X1 · 9-BLADE IRIS · 102mm BORE
+            LS1 THROTTLE BODY · 75mm BORE · OEM SPEC
         </div>
     </div>
     
-    <div class="telegram-bubble" id="telegramBtn" title="Contact via Telegram">
-        <svg viewBox="0 0 24 24">
-            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.6.15-.15 2.71-2.48 2.76-2.69.01-.03.02-.14-.07-.2-.09-.06-.22-.04-.31-.02-.13.02-2.2 1.4-6.22 4.03-.58.4-1.11.59-1.59.58-.52-.01-1.52-.3-2.26-.55-.91-.29-1.63-.45-1.57-.95.03-.36.41-.71 1.12-.99.87-.4 5.35-2.09 7.84-2.76 1.27-.37 2.56-.58 3.64-.58.29 0 .56.01.81.05.27.04.49.13.64.27.12.1.17.26.2.46z"/>
-        </svg>
-    </div>
-    
-    <div class="instruction-tip" id="helpBtn" title="Show keyboard shortcuts">
-        ⌨️ Press ? for help
+    <div class="instruction-tip" id="helpBtn" title="Show controls">
+        ? CONTROLS
     </div>
     
     <div class="help-modal" id="helpModal">
         <button class="close-btn" id="closeHelp">✕</button>
         <div class="help-content">
-            <h2>🎮 Vortex X1 Controls</h2>
+            <h2>LS1 Throttle Control</h2>
             
-            <h3>🖱️ Mouse & Touch</h3>
+            <h3>MOUSE & TOUCH</h3>
             <div class="shortcut">
                 <span class="shortcut-key">Left Drag</span>
-                <span class="shortcut-desc">Rotate view</span>
-            </div>
-            <div class="shortcut">
-                <span class="shortcut-key">Scroll</span>
-                <span class="shortcut-desc">Zoom in/out</span>
+                <span class="shortcut-desc">Rotate</span>
             </div>
             <div class="shortcut">
                 <span class="shortcut-key">Right Drag</span>
-                <span class="shortcut-desc">Pan camera</span>
+                <span class="shortcut-desc">Pan</span>
+            </div>
+            <div class="shortcut">
+                <span class="shortcut-key">Scroll</span>
+                <span class="shortcut-desc">Zoom</span>
             </div>
             
-            <h3>⌨️ Keyboard Shortcuts</h3>
+            <h3>KEYBOARD</h3>
             <div class="shortcut">
                 <span class="shortcut-key">O</span>
-                <span class="shortcut-desc">Full throttle open</span>
+                <span class="shortcut-desc">Full open (90°)</span>
             </div>
             <div class="shortcut">
                 <span class="shortcut-key">C</span>
-                <span class="shortcut-desc">Full throttle close</span>
+                <span class="shortcut-desc">Full close (0°)</span>
             </div>
             <div class="shortcut">
                 <span class="shortcut-key">SPACE</span>
                 <span class="shortcut-desc">Cycle throttle</span>
             </div>
             <div class="shortcut">
-                <span class="shortcut-key">W</span>
-                <span class="shortcut-desc">Toggle wireframe</span>
-            </div>
-            <div class="shortcut">
-                <span class="shortcut-key">M</span>
-                <span class="shortcut-desc">Toggle sound</span>
-            </div>
-            <div class="shortcut">
                 <span class="shortcut-key">R</span>
-                <span class="shortcut-desc">Reset camera view</span>
+                <span class="shortcut-desc">Reset view</span>
+            </div>
+            <div class="shortcut">
+                <span class="shortcut-key">D</span>
+                <span class="shortcut-desc">Toggle details</span>
             </div>
             <div class="shortcut">
                 <span class="shortcut-key">?</span>
-                <span class="shortcut-desc">Show this help</span>
+                <span class="shortcut-desc">Show help</span>
             </div>
-            
-            <h3>📱 Mobile Tip</h3>
-            <p>Use your finger to rotate. Two-finger pinch to zoom. Tap buttons to control throttle.</p>
         </div>
     </div>
     
     <div class="footer-legal">
-        © 2026 Douglas Owens Jr. — OwenSonicInfinity | Vortex X1 Iris Throttle Body Prototype
+        © 2026 Douglas Owens Jr. — Realistic LS1 Throttle Body Visualization
     </div>
 
-    <!-- Three.js core -->
     <script type="importmap">
         {
             "imports": {
@@ -538,589 +478,329 @@
     <script type="module">
         import * as THREE from 'three';
         import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-        import { CSS2DRenderer } from 'three/addons/renderers/CSS2DRenderer.js';
         
         // ============================================
-        // CONFIGURATION & CONSTANTS
-        // ============================================
-        const CONFIG = {
-            // Iris blade parameters
-            BLADE_COUNT: 9,
-            BORE_RADIUS: 1.02,
-            BLADE_LENGTH: 1.25,
-            BLADE_WIDTH: 0.13,
-            PIVOT_RADIUS: 1.08,
-            BLADE_RETRACT_DISTANCE: 0.82,
-            BLADE_ROTATION_FACTOR: 0.56,
-            BLADE_TILT_FACTOR: 0.4,
-            BLADE_FADE_THRESHOLD: 0.85,
-            
-            // Audio parameters
-            AUDIO_MASTER_GAIN: 0.28,
-            AUDIO_FILTER_Q: 3.2,
-            AUDIO_FILTER_FREQ_MIN: 300,
-            AUDIO_FILTER_FREQ_MAX: 3200,
-            AUDIO_RPM_MIN: 700,
-            AUDIO_RPM_MAX: 5800,
-            
-            // Particle system
-            PARTICLE_COUNT: 350,
-            PARTICLE_SIZE: 0.025,
-            VAPOR_THRESHOLD: 0.9,
-            
-            // Camera
-            CAMERA_POSITION: { x: 4, y: 3, z: 5 },
-            CAMERA_FOV: 45,
-            
-            // Cycle speed
-            CYCLE_STEP: 1.8,
-            CYCLE_INTERVAL: 28,
-        };
-        
-        // ============================================
-        // SCENE SETUP
+        // SCENE SETUP - PHOTOREALISTIC
         // ============================================
         const scene = new THREE.Scene();
-        scene.background = new THREE.Color(0x050b1a);
-        scene.fog = new THREE.FogExp2(0x050b1a, 0.008);
+        scene.background = new THREE.Color(0x2a2a2a);
+        scene.fog = new THREE.Fog(0x2a2a2a, 200, 500);
         
         const camera = new THREE.PerspectiveCamera(
-            CONFIG.CAMERA_FOV,
+            50,
             window.innerWidth / window.innerHeight,
             0.1,
             1000
         );
-        camera.position.set(CONFIG.CAMERA_POSITION.x, CONFIG.CAMERA_POSITION.y, CONFIG.CAMERA_POSITION.z);
+        camera.position.set(250, 180, 280);
         camera.lookAt(0, 0, 0);
         
-        const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
+        const renderer = new THREE.WebGLRenderer({ 
+            antialias: true, 
+            powerPreference: 'high-performance',
+            precision: 'highp'
+        });
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.shadowMap.enabled = true;
         renderer.shadowMap.type = THREE.PCFShadowShadowMap;
+        renderer.shadowMap.resolution = 2048;
         renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.outputColorSpace = THREE.SRGBColorSpace;
         document.body.appendChild(renderer.domElement);
         
-        // CSS2D label renderer
-        const labelRenderer = new CSS2DRenderer();
-        labelRenderer.setSize(window.innerWidth, window.innerHeight);
-        labelRenderer.domElement.style.position = 'absolute';
-        labelRenderer.domElement.style.top = '0px';
-        labelRenderer.domElement.style.left = '0px';
-        labelRenderer.domElement.style.pointerEvents = 'none';
-        document.body.appendChild(labelRenderer.domElement);
-        
-        // Controls
         const controls = new OrbitControls(camera, renderer.domElement);
         controls.enableDamping = true;
-        controls.dampingFactor = 0.05;
-        controls.rotateSpeed = 1.2;
-        controls.zoomSpeed = 1.2;
+        controls.dampingFactor = 0.08;
+        controls.rotateSpeed = 1;
+        controls.zoomSpeed = 1;
         controls.panSpeed = 0.8;
+        controls.autoRotate = false;
         
         // ============================================
-        // LIGHTING
+        // LIGHTING - PHOTOREALISTIC
         // ============================================
-        const ambientLight = new THREE.AmbientLight(0x222222, 1);
-        scene.add(ambientLight);
+        scene.add(new THREE.AmbientLight(0xffffff, 0.45));
         
-        const mainLight = new THREE.DirectionalLight(0xffffff, 1.4);
-        mainLight.position.set(3, 5, 2);
+        const mainLight = new THREE.DirectionalLight(0xffffff, 1.2);
+        mainLight.position.set(300, 400, 250);
         mainLight.castShadow = true;
-        mainLight.shadow.camera.far = 15;
+        mainLight.shadow.camera.left = -500;
+        mainLight.shadow.camera.right = 500;
+        mainLight.shadow.camera.top = 500;
+        mainLight.shadow.camera.bottom = -500;
+        mainLight.shadow.camera.far = 1500;
+        mainLight.shadow.mapSize.width = 2048;
+        mainLight.shadow.mapSize.height = 2048;
         scene.add(mainLight);
         
-        const fillLight = new THREE.PointLight(0x4466aa, 0.6);
-        fillLight.position.set(-1, 2, 3);
+        const fillLight = new THREE.PointLight(0xaabbdd, 0.3);
+        fillLight.position.set(-200, 100, 300);
         scene.add(fillLight);
         
-        const backLight = new THREE.PointLight(0xffaa66, 0.5);
-        backLight.position.set(0, 1.5, -2);
-        scene.add(backLight);
-        
-        const rimLight = new THREE.PointLight(0xff8844, 0.7);
-        rimLight.position.set(1, 2, -2.5);
+        const rimLight = new THREE.DirectionalLight(0xddaa88, 0.5);
+        rimLight.position.set(-300, 200, -250);
         scene.add(rimLight);
         
-        // Grid helper
-        const gridHelper = new THREE.GridHelper(8, 20, 0x335588, 0x224466);
-        gridHelper.position.y = -1.2;
-        gridHelper.material.transparent = true;
-        gridHelper.material.opacity = 0.2;
-        scene.add(gridHelper);
-        
         // ============================================
-        // THROTTLE BODY HOUSING
+        // MATERIALS - ALUMINUM & COMPONENTS
         // ============================================
-        const housingGroup = new THREE.Group();
+        const aluminumMaterial = new THREE.MeshStandardMaterial({
+            color: 0xb8b8b8,
+            metalness: 0.95,
+            roughness: 0.2,
+            envMapIntensity: 1.0
+        });
         
-        // Main cylindrical body
-        const bodyGeo = new THREE.CylinderGeometry(1.05, 1.05, 0.85, 64, 64);
-        const alumMaterial = new THREE.MeshStandardMaterial({
-            color: 0xc0d0e0,
-            roughness: 0.32,
+        const brassMaterial = new THREE.MeshStandardMaterial({
+            color: 0xc89664,
             metalness: 0.92,
-            flatShading: false
-        });
-        const bodyMesh = new THREE.Mesh(bodyGeo, alumMaterial);
-        bodyMesh.castShadow = true;
-        bodyMesh.receiveShadow = true;
-        housingGroup.add(bodyMesh);
-        
-        // Flange rings
-        const flangeGeo = new THREE.TorusGeometry(1.08, 0.05, 48, 100);
-        const flangeMat = new THREE.MeshStandardMaterial({
-            color: 0xbbaa99,
-            metalness: 0.85,
-            roughness: 0.3
-        });
-        
-        const topFlange = new THREE.Mesh(flangeGeo, flangeMat);
-        topFlange.position.y = 0.44;
-        topFlange.rotation.x = Math.PI / 2;
-        housingGroup.add(topFlange);
-        
-        const bottomFlange = new THREE.Mesh(flangeGeo, flangeMat);
-        bottomFlange.position.y = -0.44;
-        bottomFlange.rotation.x = Math.PI / 2;
-        housingGroup.add(bottomFlange);
-        
-        // Actuator housing
-        const actuatorGeo = new THREE.BoxGeometry(0.7, 0.5, 0.9);
-        const actuatorMat = new THREE.MeshStandardMaterial({
-            color: 0x8a9bb0,
-            metalness: 0.78,
-            roughness: 0.45
-        });
-        const actuator = new THREE.Mesh(actuatorGeo, actuatorMat);
-        actuator.position.set(1.2, 0.15, 0.45);
-        actuator.castShadow = true;
-        actuator.receiveShadow = true;
-        housingGroup.add(actuator);
-        
-        const actuatorCap = new THREE.Mesh(
-            new THREE.SphereGeometry(0.28, 24, 24),
-            new THREE.MeshStandardMaterial({ color: 0xccaa77, metalness: 0.6, roughness: 0.4 })
-        );
-        actuatorCap.position.set(1.45, 0.15, 0.65);
-        actuatorCap.castShadow = true;
-        housingGroup.add(actuatorCap);
-        
-        housingGroup.castShadow = true;
-        scene.add(housingGroup);
-        
-        // ============================================
-        // IRIS BLADES (9-BLADE ARRAY)
-        // ============================================
-        const bladesGroup = new THREE.Group();
-        const bladesList = [];
-        
-        // Shared blade material
-        const bladeMaterial = new THREE.MeshStandardMaterial({
-            color: 0xbcaf87,
-            metalness: 0.88,
             roughness: 0.25
         });
         
-        const angleStep = (Math.PI * 2) / CONFIG.BLADE_COUNT;
-        
-        for (let i = 0; i < CONFIG.BLADE_COUNT; i++) {
-            const bladeGeo = new THREE.BoxGeometry(
-                CONFIG.BLADE_WIDTH,
-                CONFIG.BLADE_LENGTH,
-                0.018
-            );
-            
-            // Clone material per blade for independent opacity control
-            const bladeMat = bladeMaterial.clone();
-            const blade = new THREE.Mesh(bladeGeo, bladeMat);
-            
-            const pivotAngle = i * angleStep;
-            const pivotX = Math.cos(pivotAngle) * CONFIG.PIVOT_RADIUS;
-            const pivotZ = Math.sin(pivotAngle) * CONFIG.PIVOT_RADIUS;
-            
-            const dirX = -Math.cos(pivotAngle);
-            const dirZ = -Math.sin(pivotAngle);
-            
-            blade.position.set(
-                pivotX + dirX * (CONFIG.BLADE_LENGTH * 0.45),
-                0,
-                pivotZ + dirZ * (CONFIG.BLADE_LENGTH * 0.45)
-            );
-            
-            blade.rotation.y = pivotAngle + Math.PI / 2;
-            blade.castShadow = true;
-            blade.receiveShadow = true;
-            
-            blade.userData = { pivotX, pivotZ, pivotAngle, dirX, dirZ };
-            bladesGroup.add(blade);
-            bladesList.push(blade);
-        }
-        scene.add(bladesGroup);
-        
-        // Inner aperture ring
-        const innerRingGeo = new THREE.TorusGeometry(CONFIG.BORE_RADIUS - 0.05, 0.035, 64, 128);
-        const ringMat = new THREE.MeshStandardMaterial({
-            color: 0xddccaa,
-            metalness: 0.7,
-            roughness: 0.3
+        const steelMaterial = new THREE.MeshStandardMaterial({
+            color: 0x666666,
+            metalness: 0.9,
+            roughness: 0.35
         });
-        const innerRing = new THREE.Mesh(innerRingGeo, ringMat);
-        innerRing.rotation.x = Math.PI / 2;
-        innerRing.position.y = 0.02;
-        scene.add(innerRing);
+        
+        const blackPlasticMaterial = new THREE.MeshStandardMaterial({
+            color: 0x1a1a1a,
+            metalness: 0.1,
+            roughness: 0.6
+        });
         
         // ============================================
-        // PARTICLE SYSTEM (VAPOR EFFECT)
+        // LS1 THROTTLE BODY - REALISTIC GEOMETRY
         // ============================================
-        const particleGeometry = new THREE.BufferGeometry();
-        const particlePositions = new Float32Array(CONFIG.PARTICLE_COUNT * 3);
+        const throttleGroup = new THREE.Group();
         
-        for (let i = 0; i < CONFIG.PARTICLE_COUNT; i++) {
-            particlePositions[i*3] = (Math.random() - 0.5) * 2.5;
-            particlePositions[i*3+1] = (Math.random() - 0.5) * 1.2 + 0.2;
-            particlePositions[i*3+2] = (Math.random() - 0.5) * 2.5;
+        // Main casting body (cylindrical bore)
+        const bodyGeometry = new THREE.CylinderGeometry(37.5, 37.5, 45, 64, 32);
+        const bodyMesh = new THREE.Mesh(bodyGeometry, aluminumMaterial);
+        bodyMesh.castShadow = true;
+        bodyMesh.receiveShadow = true;
+        bodyMesh.rotation.z = Math.PI / 2;
+        throttleGroup.add(bodyMesh);
+        
+        // Mounting flange (3-bolt pattern)
+        const flangeGeometry = new THREE.CylinderGeometry(42, 42, 8, 64);
+        const flangeMesh = new THREE.Mesh(flangeGeometry, aluminumMaterial);
+        flangeMesh.position.z = -28;
+        flangeMesh.rotation.z = Math.PI / 2;
+        flangeMesh.castShadow = true;
+        flangeMesh.receiveShadow = true;
+        throttleGroup.add(flangeMesh);
+        
+        // Three bolt holes (10mm dia)
+        const boltHoleRadius = 5;
+        const boltHoleDist = 28;
+        for (let i = 0; i < 3; i++) {
+            const angle = (i * Math.PI * 2) / 3 + Math.PI / 6;
+            const holeGeometry = new THREE.CylinderGeometry(boltHoleRadius, boltHoleRadius, 10, 16);
+            const holeMesh = new THREE.Mesh(holeGeometry, blackPlasticMaterial);
+            holeMesh.position.set(
+                Math.cos(angle) * boltHoleDist,
+                Math.sin(angle) * boltHoleDist,
+                -28
+            );
+            holeMesh.rotation.z = Math.PI / 2;
+            throttleGroup.add(holeMesh);
         }
         
-        particleGeometry.setAttribute('position', new THREE.BufferAttribute(particlePositions, 3));
-        const particleMaterial = new THREE.PointsMaterial({
-            color: 0x88aaff,
-            size: CONFIG.PARTICLE_SIZE,
-            transparent: true,
-            opacity: 0,
-            blending: THREE.AdditiveBlending
+        // Throttle plate butterfly (brass)
+        const plateGeometry = new THREE.BoxGeometry(70, 60, 2);
+        const plateMesh = new THREE.Mesh(plateGeometry, brassMaterial);
+        plateMesh.castShadow = true;
+        plateMesh.receiveShadow = true;
+        throttleGroup.add(plateMesh);
+        plateMesh.userData = { isThrottlePlate: true };
+        
+        // TPS sensor housing (black plastic on side)
+        const tpsSensorGeometry = new THREE.BoxGeometry(12, 15, 20);
+        const tpsSensorMesh = new THREE.Mesh(tpsSensorGeometry, blackPlasticMaterial);
+        tpsSensorMesh.position.set(35, 18, -8);
+        tpsSensorMesh.castShadow = true;
+        tpsSensorMesh.receiveShadow = true;
+        throttleGroup.add(tpsSensorMesh);
+        
+        // IAC valve port (12mm opening)
+        const iacPortGeometry = new THREE.CylinderGeometry(6, 6, 15, 24);
+        const iacPortMesh = new THREE.Mesh(iacPortGeometry, steelMaterial);
+        iacPortMesh.position.set(-32, 5, 0);
+        iacPortMesh.rotation.z = Math.PI / 2;
+        iacPortMesh.castShadow = true;
+        iacPortMesh.receiveShadow = true;
+        throttleGroup.add(iacPortMesh);
+        
+        // Vacuum ports (small protrusions)
+        const vacuumPortGeometry = new THREE.CylinderGeometry(3, 3, 10, 16);
+        const vacPort1 = new THREE.Mesh(vacuumPortGeometry, steelMaterial);
+        vacPort1.position.set(0, -32, 8);
+        vacPort1.rotation.x = Math.PI / 2;
+        vacPort1.castShadow = true;
+        throttleGroup.add(vacPort1);
+        
+        const vacPort2 = new THREE.Mesh(vacuumPortGeometry, steelMaterial);
+        vacPort2.position.set(0, 32, 8);
+        vacPort2.rotation.x = Math.PI / 2;
+        vacPort2.castShadow = true;
+        throttleGroup.add(vacPort2);
+        
+        // Throttle shaft and arm
+        const shaftGeometry = new THREE.CylinderGeometry(4, 4, 90, 16);
+        const shaftMesh = new THREE.Mesh(shaftGeometry, steelMaterial);
+        shaftMesh.rotation.z = Math.PI / 2;
+        shaftMesh.castShadow = true;
+        shaftMesh.receiveShadow = true;
+        throttleGroup.add(shaftMesh);
+        
+        // Cable linkage arm
+        const armGeometry = new THREE.BoxGeometry(10, 8, 60);
+        const armMesh = new THREE.Mesh(armGeometry, aluminumMaterial);
+        armMesh.position.set(-50, 0, 0);
+        armMesh.castShadow = true;
+        armMesh.receiveShadow = true;
+        throttleGroup.add(armMesh);
+        
+        scene.add(throttleGroup);
+        
+        // ============================================
+        // WORKBENCH / MOUNTING SURFACE
+        // ============================================
+        const benchGeometry = new THREE.BoxGeometry(500, 20, 500);
+        const benchMaterial = new THREE.MeshStandardMaterial({
+            color: 0x3a3a3a,
+            metalness: 0.3,
+            roughness: 0.8
         });
-        const particles = new THREE.Points(particleGeometry, particleMaterial);
-        scene.add(particles);
+        const bench = new THREE.Mesh(benchGeometry, benchMaterial);
+        bench.position.y = -120;
+        bench.receiveShadow = true;
+        scene.add(bench);
         
         // ============================================
-        // ENGINE STAND & BLOCK
+        // STATE & CONTROLS
         // ============================================
-        const standGroup = new THREE.Group();
-        
-        const poleGeo = new THREE.CylinderGeometry(0.12, 0.22, 1.6, 12);
-        const poleMat = new THREE.MeshStandardMaterial({ color: 0xaa9977, metalness: 0.55, roughness: 0.4 });
-        const pole = new THREE.Mesh(poleGeo, poleMat);
-        pole.position.y = -1.0;
-        pole.castShadow = true;
-        pole.receiveShadow = true;
-        standGroup.add(pole);
-        
-        const baseGeo = new THREE.BoxGeometry(1.4, 0.12, 1.4);
-        const baseMat = new THREE.MeshStandardMaterial({ color: 0x666666, metalness: 0.3, roughness: 0.6 });
-        const basePlate = new THREE.Mesh(baseGeo, baseMat);
-        basePlate.position.y = -1.65;
-        basePlate.castShadow = true;
-        basePlate.receiveShadow = true;
-        standGroup.add(basePlate);
-        scene.add(standGroup);
-        
-        // Engine block
-        const blockGeo = new THREE.BoxGeometry(1.4, 0.65, 1.2);
-        const blockMat = new THREE.MeshStandardMaterial({
-            color: 0x7a8e9e,
-            metalness: 0.6,
-            roughness: 0.5
-        });
-        const engineBlock = new THREE.Mesh(blockGeo, blockMat);
-        engineBlock.position.set(0, -0.45, 0);
-        engineBlock.castShadow = true;
-        engineBlock.receiveShadow = true;
-        scene.add(engineBlock);
-        
-        // ============================================
-        // AUDIO ENGINE
-        // ============================================
-        let audioContext = null;
-        let osc1, osc2, subOsc, filter, gainMaster;
         let currentThrottle = 0;
-        let isMuted = false;
+        let cycleActive = false;
+        let cycleInterval = null;
+        let showDetails = false;
         
-        function initAudio() {
-            if (audioContext) return;
+        function updateThrottlePosition(percent) {
+            percent = Math.max(0, Math.min(100, percent));
+            currentThrottle = percent;
             
-            try {
-                audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                
-                gainMaster = audioContext.createGain();
-                gainMaster.gain.value = CONFIG.AUDIO_MASTER_GAIN;
-                gainMaster.connect(audioContext.destination);
-                
-                filter = audioContext.createBiquadFilter();
-                filter.type = 'lowpass';
-                filter.Q.value = CONFIG.AUDIO_FILTER_Q;
-                filter.frequency.value = 400;
-                
-                osc1 = audioContext.createOscillator();
-                osc2 = audioContext.createOscillator();
-                subOsc = audioContext.createOscillator();
-                
-                osc1.type = 'sawtooth';
-                osc2.type = 'triangle';
-                subOsc.type = 'sine';
-                
-                const gain1 = audioContext.createGain();
-                const gain2 = audioContext.createGain();
-                const gainSub = audioContext.createGain();
-                
-                osc1.connect(gain1);
-                osc2.connect(gain2);
-                subOsc.connect(gainSub);
-                
-                gain1.connect(filter);
-                gain2.connect(filter);
-                gainSub.connect(filter);
-                filter.connect(gainMaster);
-                
-                gain1.gain.value = 0.45;
-                gain2.gain.value = 0.28;
-                gainSub.gain.value = 0.35;
-                
-                osc1.start();
-                osc2.start();
-                subOsc.start();
-            } catch (e) {
-                console.warn('Audio context initialization failed:', e);
-            }
-        }
-        
-        function updateEngineSound(throttlePercent) {
-            if (!audioContext || !osc1) return;
-            
-            const t = throttlePercent / 100;
-            const rpmBase = CONFIG.AUDIO_RPM_MIN + t * (CONFIG.AUDIO_RPM_MAX - CONFIG.AUDIO_RPM_MIN);
-            const engineHz = (rpmBase / 60) * 4;
-            const targetFreq = Math.min(220, Math.max(28, engineHz * 0.95));
-            
-            // Smooth frequency transitions
-            osc1.frequency.setTargetAtTime(targetFreq, audioContext.currentTime, 0.05);
-            osc2.frequency.setTargetAtTime(targetFreq * 1.005, audioContext.currentTime, 0.05);
-            subOsc.frequency.setTargetAtTime(targetFreq * 0.5, audioContext.currentTime, 0.05);
-            
-            const filterFreq = CONFIG.AUDIO_FILTER_FREQ_MIN + t * (CONFIG.AUDIO_FILTER_FREQ_MAX - CONFIG.AUDIO_FILTER_FREQ_MIN);
-            filter.frequency.setTargetAtTime(filterFreq, audioContext.currentTime, 0.05);
-            
-            if (!isMuted) {
-                const masterGain = CONFIG.AUDIO_MASTER_GAIN + t * 0.25;
-                gainMaster.gain.setTargetAtTime(masterGain, audioContext.currentTime, 0.05);
-            }
-        }
-        
-        function resumeAudioOnInteraction() {
-            if (!audioContext) {
-                initAudio();
-            }
-            if (audioContext && audioContext.state === 'suspended') {
-                audioContext.resume().catch(e => console.warn('Audio resume failed:', e));
-            }
-        }
-        
-        document.body.addEventListener('click', resumeAudioOnInteraction, { once: true });
-        document.body.addEventListener('touchstart', resumeAudioOnInteraction, { once: true });
-        
-        // ============================================
-        // THROTTLE UPDATE LOGIC
-        // ============================================
-        function updateThrottle(throttlePercent) {
-            throttlePercent = Math.max(0, Math.min(100, throttlePercent));
-            currentThrottle = throttlePercent;
-            
-            document.getElementById('throttlePercent').innerText = Math.round(throttlePercent) + '%';
-            document.getElementById('throttleSlider').value = throttlePercent;
-            
-            const t = throttlePercent / 100;
-            
-            // Update each blade with smooth easing
-            bladesList.forEach((blade) => {
-                const data = blade.userData;
-                const retractFactor = Math.min(1.0, t * 1.25);
-                
-                const outwardOffset = retractFactor * CONFIG.BLADE_RETRACT_DISTANCE;
-                const origInwardX = data.pivotX + data.dirX * (CONFIG.BLADE_LENGTH * 0.45);
-                const origInwardZ = data.pivotZ + data.dirZ * (CONFIG.BLADE_LENGTH * 0.45);
-                const retractedX = data.pivotX + data.dirX * outwardOffset;
-                const retractedZ = data.pivotZ + data.dirZ * outwardOffset;
-                
-                blade.position.x = origInwardX * (1 - retractFactor) + retractedX * retractFactor;
-                blade.position.z = origInwardZ * (1 - retractFactor) + retractedZ * retractFactor;
-                
-                const addRotation = retractFactor * Math.PI * CONFIG.BLADE_ROTATION_FACTOR;
-                blade.rotation.y = data.pivotAngle + Math.PI / 2 + addRotation;
-                blade.rotation.x = retractFactor * CONFIG.BLADE_TILT_FACTOR;
-                
-                // Smooth opacity fade
-                blade.material.opacity = Math.max(0, 1 - Math.pow(Math.max(0, retractFactor - CONFIG.BLADE_FADE_THRESHOLD) / (1 - CONFIG.BLADE_FADE_THRESHOLD), 2));
-                blade.material.transparent = blade.material.opacity < 1;
+            // Throttle plate rotation (0-90 degrees)
+            const rotationAngle = (percent / 100) * Math.PI / 2;
+            throttleGroup.children.forEach(child => {
+                if (child.userData.isThrottlePlate) {
+                    child.rotation.y = rotationAngle;
+                }
             });
             
-            // Vapor effect at high throttle
-            const vaporIntensity = Math.max(0, (t - CONFIG.VAPOR_THRESHOLD) / (1 - CONFIG.VAPOR_THRESHOLD));
-            particleMaterial.opacity = vaporIntensity * 0.6;
-            
-            if (vaporIntensity > 0.01) {
-                particles.rotation.y += 0.02;
-                particles.rotation.x = Math.sin(Date.now() * 0.004) * 0.15;
-            }
-            
-            // Audio update
-            if (audioContext && audioContext.state === 'running') {
-                updateEngineSound(throttlePercent);
-            }
+            // Update UI
+            document.getElementById('throttleSlider').value = percent;
+            document.getElementById('throttlePercent').innerText = Math.round(percent) + '°';
         }
         
         // ============================================
-        // UI EVENT HANDLERS
+        // UI HANDLERS
         // ============================================
         const slider = document.getElementById('throttleSlider');
         const fullOpenBtn = document.getElementById('fullOpenBtn');
         const fullCloseBtn = document.getElementById('fullCloseBtn');
         const cycleBtn = document.getElementById('cycleBtn');
-        const wireBtn = document.getElementById('wireframeBtn');
-        const muteBtn = document.getElementById('muteBtn');
+        const detailsBtn = document.getElementById('detailsBtn');
         const helpBtn = document.getElementById('helpBtn');
         const helpModal = document.getElementById('helpModal');
         const closeHelpBtn = document.getElementById('closeHelp');
-        const telegramBtn = document.getElementById('telegramBtn');
-        
-        let wireframeMode = false;
-        let cycling = false;
-        let cycleInterval = null;
         
         slider.addEventListener('input', (e) => {
-            if (cycling) stopCycle();
-            updateThrottle(parseFloat(e.target.value));
-            resumeAudioOnInteraction();
+            if (cycleActive) stopCycle();
+            updateThrottlePosition(parseFloat(e.target.value));
         });
         
         fullOpenBtn.addEventListener('click', () => {
-            if (cycling) stopCycle();
-            updateThrottle(100);
-            resumeAudioOnInteraction();
+            if (cycleActive) stopCycle();
+            updateThrottlePosition(90);
         });
         
         fullCloseBtn.addEventListener('click', () => {
-            if (cycling) stopCycle();
-            updateThrottle(0);
-            resumeAudioOnInteraction();
+            if (cycleActive) stopCycle();
+            updateThrottlePosition(0);
         });
         
-        function stopCycle() {
-            if (cycleInterval) clearInterval(cycleInterval);
-            cycling = false;
-            cycleBtn.textContent = '▶ CYCLE (Space)';
+        function startCycle() {
+            if (cycleActive) return;
+            cycleActive = true;
+            cycleBtn.style.background = '#c89664';
+            cycleBtn.style.color = '#1a1a1a';
+            
+            let direction = 1;
+            cycleInterval = setInterval(() => {
+                currentThrottle += direction * 2;
+                if (currentThrottle >= 90) {
+                    direction = -1;
+                    currentThrottle = 90;
+                } else if (currentThrottle <= 0) {
+                    direction = 1;
+                    currentThrottle = 0;
+                }
+                updateThrottlePosition(currentThrottle);
+            }, 50);
         }
         
-        function startCycle() {
+        function stopCycle() {
+            if (!cycleActive) return;
+            cycleActive = false;
+            cycleBtn.style.background = '';
+            cycleBtn.style.color = '';
             if (cycleInterval) clearInterval(cycleInterval);
-            cycling = true;
-            let dir = 1;
-            let val = 0;
-            updateThrottle(0);
-            resumeAudioOnInteraction();
-            
-            cycleInterval = setInterval(() => {
-                if (!cycling) return;
-                val += dir * CONFIG.CYCLE_STEP;
-                
-                if (val >= 100) {
-                    val = 100;
-                    dir = -1;
-                } else if (val <= 0) {
-                    val = 0;
-                    dir = 1;
-                }
-                
-                updateThrottle(Math.min(100, Math.max(0, val)));
-            }, CONFIG.CYCLE_INTERVAL);
-            
-            cycleBtn.textContent = '⏸ STOP (Space)';
         }
         
         cycleBtn.addEventListener('click', () => {
-            cycling ? stopCycle() : startCycle();
+            if (cycleActive) stopCycle();
+            else startCycle();
         });
         
-        wireBtn.addEventListener('click', () => {
-            wireframeMode = !wireframeMode;
-            bladesList.forEach(b => b.material.wireframe = wireframeMode);
-            bodyMesh.material.wireframe = wireframeMode;
-            actuator.material.wireframe = wireframeMode;
-            wireBtn.textContent = wireframeMode ? '🔲 SOLID (W)' : '🔲 WIREFRAME (W)';
+        detailsBtn.addEventListener('click', () => {
+            showDetails = !showDetails;
+            detailsBtn.style.opacity = showDetails ? '1' : '0.7';
         });
         
-        muteBtn.addEventListener('click', () => {
-            if (!audioContext) initAudio();
-            
-            isMuted = !isMuted;
-            if (isMuted) {
-                if (gainMaster) gainMaster.gain.setTargetAtTime(0, audioContext?.currentTime || 0, 0.1);
-                muteBtn.textContent = '🔇 OFF (M)';
-            } else {
-                if (gainMaster) gainMaster.gain.setTargetAtTime(CONFIG.AUDIO_MASTER_GAIN, audioContext?.currentTime || 0, 0.1);
-                muteBtn.textContent = '🔊 ON (M)';
-                if (audioContext && audioContext.state === 'suspended') audioContext.resume();
-                updateEngineSound(currentThrottle);
-            }
-        });
-        
-        // Help modal
-        function openHelp() {
+        helpBtn.addEventListener('click', () => {
             helpModal.classList.add('active');
-        }
+        });
         
-        function closeHelp() {
+        closeHelpBtn.addEventListener('click', () => {
             helpModal.classList.remove('active');
-        }
-        
-        helpBtn.addEventListener('click', openHelp);
-        closeHelpBtn.addEventListener('click', closeHelp);
-        helpModal.addEventListener('click', (e) => {
-            if (e.target === helpModal) closeHelp();
         });
         
-        // Keyboard shortcuts
-        window.addEventListener('keydown', (e) => {
-            if (e.key === '?') {
-                openHelp();
-                return;
+        // Keyboard controls
+        document.addEventListener('keydown', (e) => {
+            const key = e.key.toLowerCase();
+            if (key === 'o') updateThrottlePosition(90);
+            else if (key === 'c') updateThrottlePosition(0);
+            else if (key === ' ') {
+                e.preventDefault();
+                if (cycleActive) stopCycle();
+                else startCycle();
             }
-            
-            if (helpModal.classList.contains('active')) {
-                if (e.key === 'Escape') closeHelp();
-                return;
+            else if (key === 'r') {
+                camera.position.set(250, 180, 280);
+                controls.target.set(0, 0, 0);
+                controls.update();
             }
-            
-            switch(e.key.toLowerCase()) {
-                case 'o':
-                    fullOpenBtn.click();
-                    break;
-                case 'c':
-                    fullCloseBtn.click();
-                    break;
-                case ' ':
-                    e.preventDefault();
-                    cycleBtn.click();
-                    break;
-                case 'w':
-                    wireBtn.click();
-                    break;
-                case 'm':
-                    muteBtn.click();
-                    break;
-                case 'r':
-                    camera.position.set(CONFIG.CAMERA_POSITION.x, CONFIG.CAMERA_POSITION.y, CONFIG.CAMERA_POSITION.z);
-                    controls.target.set(0, 0, 0);
-                    controls.update();
-                    break;
-            }
+            else if (key === 'd') detailsBtn.click();
+            else if (key === '?') helpBtn.click();
         });
         
-        // Telegram button
-        telegramBtn.addEventListener('click', () => {
-            window.open('https://t.me/owensonicinfinity', '_blank');
+        // Window resize
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
         });
-        
-        // Initial state
-        updateThrottle(0);
         
         // ============================================
         // ANIMATION LOOP
@@ -1128,32 +808,10 @@
         function animate() {
             requestAnimationFrame(animate);
             controls.update();
-            
-            // Idle vibration (realistic engine tick)
-            if (currentThrottle < 5 && !cycling) {
-                const jitter = Math.sin(Date.now() * 0.035) * 0.0005;
-                bladesGroup.rotation.z = jitter;
-            } else {
-                bladesGroup.rotation.z = 0;
-            }
-            
             renderer.render(scene, camera);
-            labelRenderer.render(scene, camera);
         }
+        
         animate();
-        
-        // ============================================
-        // RESPONSIVE RESIZE
-        // ============================================
-        window.addEventListener('resize', () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            labelRenderer.setSize(window.innerWidth, window.innerHeight);
-        });
-        
-        console.log('%cVortex X1 Iris Throttle Body', 'font-size:16px;font-weight:bold;color:#ff4d2e;');
-        console.log('%c9-Blade Precision + Realistic V8 Audio Engine', 'font-size:12px;color:#ffaa44;');
     </script>
 </body>
 </html>
